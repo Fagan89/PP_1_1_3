@@ -12,7 +12,6 @@ public class UserDaoJDBCImpl implements UserDao {
 
     }
 
-    // создание таблицы с юзерами (работает)
     public void createUsersTable() {
 
         String sql = "CREATE TABLE user (\n" +
@@ -27,13 +26,12 @@ public class UserDaoJDBCImpl implements UserDao {
         try {
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
-            System.out.println("создал таблицу");
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    // удалить таблицу (работает)
     public void dropUsersTable() {
         String sql = "DROP TABLE if EXISTS USER";
 
@@ -41,14 +39,12 @@ public class UserDaoJDBCImpl implements UserDao {
         try {
             Statement statement = connection.createStatement();
             statement.executeUpdate(sql);
-            System.out.println("удалил таблицу");
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-
     }
-    // сохранить юзера (добавить в таблицу) (работает)
+
     public void saveUser(String name, String lastName, byte age) {
         String sql = "INSERT INTO user (id, name, lastName, age) VALUES (NULL, ?, ?, ?)";
 
@@ -56,39 +52,35 @@ public class UserDaoJDBCImpl implements UserDao {
         PreparedStatement preparedStatement = null;
 
         try {
-            preparedStatement = connection.prepareStatement(sql); // создаем заявление
+            preparedStatement = connection.prepareStatement(sql); 
 
-            preparedStatement.setString(1,name);// в SQL запросе устаналиваем значения
-            preparedStatement.setString(2,lastName);// в SQL запросе устаналиваем значения
-            preparedStatement.setLong(3,age);// в SQL запросе устаналиваем значения
-            preparedStatement.executeUpdate(); // метод возвращает количество измененных строк
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setLong(3, age);
+            preparedStatement.executeUpdate();
 
-            System.out.println("добавил в таблицу сроку");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
     }
 
-    // удалить из таблицы юзера под id (работает)
     public void removeUserById(long id) {
         String sql = "DELETE FROM user WHERE ID=?";
 
-        Connection connection = Util.getConnection(); // возвращаем коннект
+        Connection connection = Util.getConnection();
         PreparedStatement preparedStatement = null;
 
         try {
-            preparedStatement = connection.prepareStatement(sql); // создаем заявление
-            preparedStatement.setLong(1,id); // в SQL указываем нужный индекс (устаналиваем значения)
-            preparedStatement.executeUpdate(); // метод возвращает количество измененных строк
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
 
-            System.out.println("удалил из таблицы сроку по id");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    // вернуть списком всех юзеров из таблицы
     public List<User> getAllUsers() {
         String sql = "SELECT * FROM USER;";
 
@@ -101,7 +93,6 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            // задаем поля для объекта User (работает)
             while (resultSet.next()) {
                 User user = new User();
                 user.setId(resultSet.getLong("ID"));
@@ -111,15 +102,12 @@ public class UserDaoJDBCImpl implements UserDao {
                 users.add(user);
             }
 
-            System.out.println("создан объект из строки таблицы");
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return users;
     }
 
-    // очистить таблицу пользователей (работает)
     public void cleanUsersTable() {
         String sql = "DELETE FROM USER;";
 
@@ -128,7 +116,6 @@ public class UserDaoJDBCImpl implements UserDao {
             Statement statement = connection.createStatement();
             statement.executeUpdate(sql);
 
-            System.out.println("таблица очищена");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
